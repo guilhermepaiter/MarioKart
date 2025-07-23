@@ -1,0 +1,25 @@
+{
+  "name": "mariokart",
+  "version": "1.0.0",
+  "description": "A mario kart simulator",
+  "keywords": [
+    "mario",
+    "kart",
+    "nintendo"
+  ],
+  "homepage": "https://github.com/guilhermepaiter/MarioKart#readme",
+  "bugs": {
+    "url": "https://github.com/guilhermepaiter/MarioKart/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guilhermepaiter/MarioKart.git"
+  },
+  "license": "ISC",
+  "author": "Guipaiter",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
