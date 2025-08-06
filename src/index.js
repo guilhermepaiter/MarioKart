@@ -1,5 +1,6 @@
 // A base de dados com todos os personagens e seus atributos
 // Remova o arquivo persona.js e use esta estrutura
+// A base de dados com todos os personagens e seus atributos
 const personagens = {
     Mario: {
         nome: "Mario",
@@ -45,6 +46,15 @@ const personagens = {
     }
 };
 
+// Importa o módulo 'readline' para ler a entrada do usuário
+const readline = require('readline');
+
+// Configura a interface para leitura de entrada e saída
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
 // Esta função agora "seleciona" um personagem da nossa base de dados
 // Ela cria uma cópia do objeto para que os pontos de cada jogador sejam independentes
 function selecionarPersonagem(nomeDoPersonagem) {
@@ -56,6 +66,21 @@ function selecionarPersonagem(nomeDoPersonagem) {
         return { ...personagens["Mario"]
         };
     }
+}
+
+// Nova função para escolher um personagem via prompt do terminal
+async function escolherPersonagem(playerNumber) {
+    console.log(`\nEscolha o personagem para o Jogador ${playerNumber}:`);
+    console.log("Personagens disponíveis: Mario, Peach, Yoshi, Bowser, Luigi, Dk");
+
+    return new Promise(resolve => {
+        rl.question(`Digite o nome do personagem para o Jogador ${playerNumber}: `, (answer) => {
+            // Converte a primeira letra para maiúscula para corresponder à base de dados
+            const characterName = answer.charAt(0).toUpperCase() + answer.slice(1).toLowerCase();
+            const character = selecionarPersonagem(characterName);
+            resolve(character);
+        });
+    });
 }
 
 async function rollDice() {
@@ -85,23 +110,23 @@ async function logRollResult(characterName, block, diceResult, atribute) {
 }
 
 async function playRaceEngine(character1, character2) {
-    for(let round = 1; round <=   5; round ++) {
+    for (let round = 1; round <= 5; round++) {
         console.log(`🏁 Rodada ${round}`)
 
-        //sortear bloco
+        // sortear bloco
         let block = await getRandomBlock()
         console.log(`Bloco: ${block}`)
 
-        //rolar os dados
+        // rolar os dados
         let diceResult1 = await rollDice()
         let diceResult2 = await rollDice()
 
-        //teste de habilidade
+        // teste de habilidade
         let testSkill1 = 0
         let testSkill2 = 0
-    
+
         if (block == "Reta") {
-            testSkill1 = diceResult1 + character1.velocidade 
+            testSkill1 = diceResult1 + character1.velocidade
             testSkill2 = diceResult2 + character2.velocidade
 
             await logRollResult(
@@ -119,11 +144,12 @@ async function playRaceEngine(character1, character2) {
             )
 
             if (testSkill1 === testSkill2) {
-                console.log("🏎 Disputa acirrada! Nenum jogador marcou ponto.")
+                console.log("🏎 Disputa acirrada! Nenhum jogador marcou ponto.")
             }
-                
-        } if (block == "Curva") {
-            testSkill1 = diceResult1 + character1.manobrabilidade 
+
+        }
+        if (block == "Curva") {
+            testSkill1 = diceResult1 + character1.manobrabilidade
             testSkill2 = diceResult2 + character2.manobrabilidade
 
             await logRollResult(
@@ -141,15 +167,15 @@ async function playRaceEngine(character1, character2) {
             )
 
             if (testSkill1 === testSkill2) {
-                console.log("🏎 Disputa acirrada! Nenum jogador marcou ponto.")
+                console.log("🏎 Disputa acirrada! Nenhum jogador marcou ponto.")
             }
 
-        } if (block == "Confronto") {
+        }
+        if (block == "Confronto") {
             let powerResult1 = diceResult1 + character1.poder
             let powerResult2 = diceResult2 + character2.poder
 
-            console.log(`${character1.nome} confrontou com ${character2.nome}!
-            🥊`)
+            console.log(`${character1.nome} confrontou com ${character2.nome}!🥊\n`)
 
             await logRollResult(
                 character1.nome,
@@ -177,9 +203,8 @@ async function playRaceEngine(character1, character2) {
                 character1.pontos--
             }
 
-            console.log(powerResult2 === powerResult1 
-                ? "Confronto empatado! Nenhum ponto foi perdido."
-                : "")
+            console.log(powerResult2 === powerResult1 ?
+                "Confronto empatado! Nenhum ponto foi perdido." : "")
         }
 
         if (testSkill1 > testSkill2) {
@@ -191,7 +216,7 @@ async function playRaceEngine(character1, character2) {
         }
 
         console.log("_____________________________________\n")
-        
+
     }
 }
 
@@ -205,15 +230,15 @@ async function winner(character1, character2) {
     } else if (character2.pontos > character1.pontos) {
         console.log(`\n${character2.nome} venceu a corrida! parabéns 🏆🎉`)
     } else {
-        console.log("A corrida terminou em empater! 🤝")
+        console.log("A corrida terminou em empate! 🤝")
     }
 }
 
 (async function main() {
     // AQUI VOCÊ PODE MUDAR OS PERSONAGENS!
     // Para testar, basta passar o nome do personagem como string
-    const player1 = selecionarPersonagem("Bowser");
-    const player2 = selecionarPersonagem("Peach");
+    const player1 = await escolherPersonagem(1);
+    const player2 = await escolherPersonagem(2);
 
     if (player1 && player2) {
         console.log(
@@ -224,6 +249,8 @@ async function winner(character1, character2) {
 
         await winner(player1, player2);
     }
+    // Fecha a interface do readline para que o programa termine
+    rl.close();
 })();
 
 // Código original sem a base de dados de personagens
