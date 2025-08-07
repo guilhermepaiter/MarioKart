@@ -1,5 +1,4 @@
 // A base de dados com todos os personagens e seus atributos
-// Remova o arquivo persona.js e use esta estrutura
 // A base de dados com todos os personagens e seus atributos
 const personagens = {
     Mario: {
