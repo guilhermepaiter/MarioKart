@@ -248,7 +248,7 @@ async function winner(character1, character2) {
 
         await winner(player1, player2);
     }
-    // Fecha a interface do readline para que o programa termine
+     // Fecha a interface do readline para que o programa termine
     rl.close();
 })();
 
